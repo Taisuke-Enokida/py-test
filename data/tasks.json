@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Set up repository",
+    "done": true
+  },
+  {
+    "id": 2,
+    "title": "Try the task tracker CLI",
+    "done": false
+  }
+]
