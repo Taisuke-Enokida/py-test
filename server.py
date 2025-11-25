@@ -28,78 +28,185 @@ def render_html(message: str | None = None) -> str:
   <meta charset="utf-8">
   <title>Task Tracker</title>
   <style>
+    /* 全体のスタイル */
     body {{
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
       max-width: 720px;
       margin: 40px auto;
       padding: 0 16px;
-      background: #f7f7fb;
+      /* グラデーション背景を追加 */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       color: #1b1b1f;
     }}
-    h1 {{ margin-bottom: 6px; }}
-    p.sub {{ margin-top: 0; color: #4a5568; }}
-    .card {{
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    
+    /* タイトルとサブタイトル */
+    h1 {{
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 2.2em;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }}
-    form.add {{ display: flex; gap: 8px; margin-bottom: 12px; }}
+    p.sub {{
+      margin-top: 0;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.95em;
+    }}
+    
+    /* メインカード */
+    .card {{
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      /* ホバー時に少し浮き上がる効果 */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }}
+    .card:hover {{
+      transform: translateY(-2px);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }}
+    
+    /* フォームのスタイル */
+    form.add {{
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }}
     form.add input[type=text] {{
       flex: 1;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
       font-size: 15px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }}
+    /* 入力フィールドにフォーカスした時のスタイル */
+    form.add input[type=text]:focus {{
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }}
+    
+    /* ボタンの基本スタイル */
     button {{
       cursor: pointer;
       border: none;
-      border-radius: 10px;
-      background: #2563eb;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 10px 14px;
+      padding: 12px 20px;
       font-size: 14px;
-      transition: transform 120ms ease, box-shadow 120ms ease;
-      box-shadow: 0 6px 16px rgba(37,99,235,0.25);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }}
-    button:hover {{ transform: translateY(-1px); box-shadow: 0 8px 18px rgba(37,99,235,0.3); }}
-    button:active {{ transform: translateY(0); }}
+    button:hover {{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }}
+    button:active {{
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    }}
     button.secondary {{
-      background: #e5e7eb;
-      color: #1f2937;
-      box-shadow: none;
+      background: #f1f5f9;
+      color: #475569;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }}
-    ul {{ list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }}
-    li {{
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
+    button.secondary:hover {{
+      background: #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }}
+    
+    /* タスクリスト */
+    ul {{
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+      display: grid;
       gap: 10px;
     }}
-    li[data-status="done"] .title {{ text-decoration: line-through; color: #6b7280; }}
+    li {{
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }}
+    /* タスクアイテムにホバーした時の効果 */
+    li:hover {{
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateX(4px);
+    }}
+    /* 完了したタスクのスタイル */
+    li[data-status="done"] {{
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }}
+    li[data-status="done"] .title {{
+      text-decoration: line-through;
+      color: #6b7280;
+    }}
+    
+    /* トグルボタン */
     button.toggle {{
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       padding: 0;
       font-size: 18px;
-      background: #fff;
+      background: #ffffff;
       color: #111;
-      border: 1px solid #e5e7eb;
-      box-shadow: none;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      transition: all 0.2s ease;
     }}
-    li .title {{ flex: 1; }}
+    button.toggle:hover {{
+      border-color: #667eea;
+      transform: scale(1.1);
+    }}
+    
+    li .title {{
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+    }}
+    
+    /* 通知メッセージ */
     .notice {{
-      background: #ecfeff;
-      border: 1px solid #67e8f9;
-      padding: 10px 12px;
-      border-radius: 8px;
+      background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+      border: 2px solid #67e8f9;
+      padding: 12px 16px;
+      border-radius: 10px;
       color: #0f172a;
+      margin-bottom: 16px;
+      font-weight: 500;
+      /* フェードインアニメーション */
+      animation: fadeIn 0.3s ease;
     }}
-    .empty {{ color: #94a3b8; font-style: italic; }}
+    @keyframes fadeIn {{
+      from {{
+        opacity: 0;
+        transform: translateY(-10px);
+      }}
+      to {{
+        opacity: 1;
+        transform: translateY(0);
+      }}
+    }}
+    
+    .empty {{
+      color: #94a3b8;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }}
   </style>
 </head>
 <body>

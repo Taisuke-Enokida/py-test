@@ -2,11 +2,13 @@
   {
     "id": 1,
     "title": "Set up repository",
+    "description": null,
     "done": true
   },
   {
     "id": 2,
     "title": "Try the task tracker CLI",
+    "description": null,
     "done": false
   }
 ]
