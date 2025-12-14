@@ -50,7 +50,8 @@ def render_html(message: str | None = None) -> str:
     }}
     p.sub {{
       margin-top: 0;
-      color: rgba(255,255,255,0.9);
+      /* コメント通り、ここは黒にする（数行だけ黒く） */
+      color: #000000;
       font-size: 0.95em;
     }}
     
@@ -176,6 +177,8 @@ def render_html(message: str | None = None) -> str:
       flex: 1;
       font-size: 15px;
       font-weight: 500;
+      /* タスクのタイトルは常に黒にする（未完了は黒、完了は既存のグレー） */
+      color: #000000;
     }}
     
     /* 通知メッセージ */
